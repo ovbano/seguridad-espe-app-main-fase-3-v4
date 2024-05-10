@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,24 +66,35 @@ class _InformationFamilyState extends State<InformationFamily> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black87),
+        iconTheme:
+            const IconThemeData(color: Color.fromARGB(221, 255, 255, 255)),
         centerTitle: false,
+        flexibleSpace: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromRGBO(106, 162, 142, 1),
+                Color.fromRGBO(2, 79, 49, 1),
+              ],
+            ),
+          ),
+        ),
         // automaticallyImplyLeading: routeActive,
         title: const Text(
           'Mis contactos de emergencia',
-          style: TextStyle(color: Colors.black87),
+          style: TextStyle(color: Color.fromARGB(221, 255, 255, 255)),
         ),
-
-        //TODO: Modificaciones
         actions: [
           //boton texto de siguiente
           authService.state.usuario?.telefonos != null && isNumberAdd == false
               ? const SizedBox()
               : TextButton(
                   onPressed: () {
-                    //TODO: actulizar el estado de navigator
                     navigatorBloc.add(const NavigatorIsPlaceSelectedEvent(
                         isPlaceSelected: true));
 
@@ -94,106 +104,103 @@ class _InformationFamilyState extends State<InformationFamily> {
                   },
                   child: const Text(
                     'Siguiente',
-                    style: TextStyle(color: Color(0xFF6165FA), fontSize: 16),
+                    style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1), fontSize: 16),
                   ),
                 ),
         ],
       ),
-      body: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListView(
-                  controller: _scrollController,
-                  shrinkWrap: true,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                          width: MediaQuery.of(context).size.width * 0.80,
-                          height: MediaQuery.of(context).size.height * 0.40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: image1),
-                    ),
-                    const Text(
-                      "Agrega los números de teléfono de tus contactos en caso de emergencia, para que puedan recibir alertas de tus seres queridos. Solo los números que hayas añadido serán notificados una vez que presiones el botón de SOS.",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(0, 0, 0, 0.782),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                shrinkWrap: true,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.80,
+                      height: MediaQuery.of(context).size.height * 0.40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
                       ),
+                      child: image1,
                     ),
-                    const SizedBox(
-                      height: 20,
+                  ),
+                  const Text(
+                    "Agrega los números de teléfono de tus contactos en caso de emergencia, para que puedan recibir alertas de tus seres queridos. Solo los números que hayas añadido serán notificados una vez que presiones el botón de SOS.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Color.fromRGBO(0, 0, 0, 0.782),
                     ),
-                    _TextFieldAddTelefono(
-                        telefonoController: telefonoController),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 38,
-                      child: ElevatedButton(
-                        onPressed: areFieldsEmpty
-                            ? null
-                            : () {
-                                if (authService.state.usuario?.telefonos
-                                        .contains(
-                                            telefonoController.text.trim()) ??
-                                    false) {
-                                  mostrarAlerta(
-                                    context,
-                                    'Número ya registrado',
-                                    'El número que estás intentando ingresar ya se encuentra registrado.',
-                                  );
-                                  return;
-                                }
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _TextFieldAddTelefono(telefonoController: telefonoController),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 38,
+                    child: ElevatedButton(
+                      onPressed: areFieldsEmpty
+                          ? null
+                          : () {
+                              if (authService.state.usuario?.telefonos.contains(
+                                      telefonoController.text.trim()) ??
+                                  false) {
+                                mostrarAlerta(
+                                  context,
+                                  'Número ya registrado',
+                                  'El número que estás intentando ingresar ya se encuentra registrado.',
+                                );
+                                return;
+                              }
 
-                                if (authService.state.usuario?.telefono ==
-                                    telefonoController.text.trim()) {
-                                  mostrarAlerta(
-                                    context,
-                                    'Número ya registrado',
-                                    'No puedes agregar tu propio número de teléfono.',
-                                  );
-                                  return;
-                                }
+                              if (authService.state.usuario?.telefono ==
+                                  telefonoController.text.trim()) {
+                                mostrarAlerta(
+                                  context,
+                                  'Número ya registrado',
+                                  'No puedes agregar tu propio número de teléfono.',
+                                );
+                                return;
+                              }
 
-                                authService.addTelefonoFamily(
-                                    telefonoController.text.trim());
+                              authService.addTelefonoFamily(
+                                  telefonoController.text.trim());
 
-                                setState(() {
-                                  isNumberAdd = true;
-                                });
+                              setState(() {
+                                isNumberAdd = true;
+                              });
 
-                                telefonoController.clear();
-                              },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6165FA),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
+                              telefonoController.clear();
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(106, 162, 142, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        child: const Text('Agregar número'),
                       ),
+                      child: const Text('Agregar número', style: TextStyle(color: Colors.white)),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    _ListContact(authService: authService, telefonos: telefonos)
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _ListContact(authService: authService, telefonos: telefonos)
+                ],
               ),
-            ],
-          ),
-        );
-      }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -207,7 +214,7 @@ class _InformationFamilyState extends State<InformationFamily> {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF6165FA), // Un color atractivo
+              color: Color.fromRGBO(106, 162, 142, 1), // Un color atractivo
             ),
           ),
           content: Text(
@@ -220,8 +227,7 @@ class _InformationFamilyState extends State<InformationFamily> {
                 'Cerrar',
                 style: TextStyle(
                   fontSize: 18,
-                  color: Color(
-                      0xFF6165FA), // Mismo color que el título para coherencia
+                  color: Color.fromRGBO(106, 162, 142, 1), // Mismo color que el título para coherencia
                 ),
               ),
               onPressed: () {
@@ -290,12 +296,11 @@ class _TextFieldAddTelefono extends StatelessWidget {
             decoration: const InputDecoration(
               labelText: 'Teléfono',
               labelStyle: TextStyle(
-                color: Color(0xFF6165FA), // Color del texto del label
+                color: Color.fromRGBO(106, 162, 142, 1), // Color del texto del label
               ),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color(
-                      0xFF6165FA), // Color de la línea de abajo del TextField
+                  color: Color.fromRGBO(106, 162, 142, 1), // Color de la línea de abajo del TextField
                 ),
               ),
             ),
@@ -345,7 +350,7 @@ class _ListContact extends StatelessWidget {
           child: ListTile(
             leading: const Icon(
               Icons.person,
-              color: Color(0xFF6165FA),
+              color: Color.fromRGBO(106, 162, 142, 1),
             ),
             title: Text(
               state.usuario?.telefonos[index] ?? '',
@@ -458,7 +463,7 @@ class _ListContact extends StatelessWidget {
                 Navigator.pop(context); // Cerrar el diálogo después de eliminar
               },
               style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFF6165FA),
+                foregroundColor: const Color.fromRGBO(106, 162, 142, 1),
               ),
               child: const Text(
                 'Eliminar',

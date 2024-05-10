@@ -22,6 +22,7 @@ class Labels extends StatelessWidget {
                   color: Color.fromARGB(255, 0, 0, 0), fontSize: 18)),
         ),
       ],
+      
     );
   }
 }

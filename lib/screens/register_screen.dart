@@ -59,13 +59,6 @@ class RegisterScreen extends StatelessWidget {
                       text2: "Ingresa",
                     ),
                     SizedBox(height: 20),
-                    /*Text(
-                      "Terminos y condiciones de uso",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(0, 0, 0, 0.782),
-                      ),
-                    ),*/
                   ],
                 ),
               ),

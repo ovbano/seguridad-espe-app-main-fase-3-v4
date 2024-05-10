@@ -53,131 +53,159 @@ class _InformationScreenState extends State<InformationScreen> {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black87),
-        centerTitle: false,
-        title: const Text(
-          'Información del contacto',
-          style: TextStyle(color: Colors.black87),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Para brindar una respuesta rápida en situaciones de emergencia, le solicitamos que ingrese su número de teléfono.",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: Color.fromRGBO(0, 0, 0, 0.782),
+      // appBar: AppBar(
+      //   iconTheme: const IconThemeData(color: Colors.black87),
+      //   centerTitle: false,
+      //   title: const Text(
+      //     'Información del contacto',
+      //     style: TextStyle(color: Colors.black87),
+      //   ),
+      // ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromRGBO(106, 162, 142, 1),
+                  Color.fromRGBO(2, 79, 49, 1),
+                ],
               ),
             ),
-            const SizedBox(
-              height: 20,
+            child: const Center(
+              child: Text(
+                "Información del contacto",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            Row(
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //bandera y +593
+                const Text(
+                  "Para brindar una respuesta rápida en situaciones de emergencia, le solicitamos que ingrese su número de teléfono.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromRGBO(0, 0, 0, 0.782),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: [
-                    //imagen de la bandera
-                    Container(
-                      width: 40,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Image.asset(
-                        'assets/ecuador.jpg',
-                        fit: BoxFit.cover,
-                      ),
+                    //bandera y +593
+                    Row(
+                      children: [
+                        //imagen de la bandera
+                        Container(
+                          width: 40,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Image.asset(
+                            'assets/ecuador.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          width: 60,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'EC +593',
+                              style: TextStyle(
+                                color: Color.fromRGBO(0, 0, 0, 0.782),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       width: 10,
                     ),
-                    Container(
-                      width: 60,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'EC +593',
-                          style: TextStyle(
-                            color: Color.fromRGBO(0, 0, 0, 0.782),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                    Expanded(
+                      child: TextField(
+                        controller: telefonoController,
+                        maxLength: 10,
+                        decoration: const InputDecoration(
+                          labelText: 'Teléfono',
+                          labelStyle: TextStyle(
+                            color:
+                                Color.fromRGBO(106, 162, 142, 1), // Color del texto del label
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromRGBO(106, 162, 142, 1), // Color de la línea de abajo del TextField
+                            ),
                           ),
                         ),
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        ],
                       ),
                     )
                   ],
                 ),
                 const SizedBox(
-                  width: 10,
+                  height: 20,
                 ),
-                Expanded(
-                  child: TextField(
-                    controller: telefonoController,
-                    maxLength: 10,
-                    decoration: const InputDecoration(
-                      labelText: 'Teléfono',
-                      labelStyle: TextStyle(
-                        color: Color(0xFF6165FA), // Color del texto del label
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(
-                              0xFF6165FA), // Color de la línea de abajo del TextField
-                        ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 38,
+                  child: ElevatedButton(
+                    onPressed: areFieldsEmpty
+                        ? null
+                        : () async {
+                            //cerrar el teclado
+                            FocusScope.of(context).unfocus();
+                            await authBloc
+                                .addTelefono(telefonoController.text.trim());
+
+                            // NavigatorIsNumberFamilyEvent
+                            navigatorBloc.add(
+                                const NavigatorIsNumberFamilyEvent(
+                                    isNumberFamily: true));
+                            // ignore: use_build_context_synchronously
+                            Navigator.of(context).push(CreateRoute.createRoute(
+                                const InformationFamily()));
+                            // Navigator.pushNamedAndRemoveUntil(
+                            //     context, HomeScreen.homeroute, (route) => false);
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(106, 162, 142, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 38,
-              child: ElevatedButton(
-                onPressed: areFieldsEmpty
-                    ? null
-                    : () async {
-                        //cerrar el teclado
-                        FocusScope.of(context).unfocus();
-                        await authBloc
-                            .addTelefono(telefonoController.text.trim());
-
-                        // NavigatorIsNumberFamilyEvent
-                        navigatorBloc.add(const NavigatorIsNumberFamilyEvent(
-                            isNumberFamily: true));
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).push(
-                            CreateRoute.createRoute(const InformationFamily()));
-                        // Navigator.pushNamedAndRemoveUntil(
-                        //     context, HomeScreen.homeroute, (route) => false);
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6165FA),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    child: const Text('Guardar', style: TextStyle(color: Colors.white)) ,
                   ),
                 ),
-                child: const Text('Guardar'),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -11,26 +11,26 @@ class AlertsScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.blueGrey[50],
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
           centerTitle: false,
-          title: const Text("Reportar"),
+          title: const Text("Reportar", style: TextStyle(color: Colors.white)),
           //color de la flcha de regreso blanco
           iconTheme: const IconThemeData(color: Colors.white),
-          backgroundColor: const Color(0xFF111b21),
+          backgroundColor: const Color.fromRGBO(2, 79, 49, 1),
           bottom: const TabBar(
             tabs: [
               Tab(
-                text: ("SEGURIDAD"),
+                child: Text("SEGURIDAD", style: TextStyle(color: Colors.white)),
               ),
               Tab(
-                text: ("COMUNIDAD"),
+                child: Text("COMUNIDAD", style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
         ),
         body: Container(
-          color: const Color(0xFF111b21),
+          color: const Color.fromRGBO(2, 79, 49, 1),
           child: const TabBarView(
             //color de fondo de la pantalla
 

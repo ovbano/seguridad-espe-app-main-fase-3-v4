@@ -1,18 +1,20 @@
-// ignore_for_file: unused_local_variable, unused_import
+// ignore_for_file: unused_import, unused_local_variable, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/delegates/search_destination_delegate.dart';
 import 'package:flutter_maps_adv/models/search_result.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
+import 'package:flutter_maps_adv/screens/map_screen.dart';
 import 'package:flutter_maps_adv/screens/place_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PlacesScreen extends StatelessWidget {
   static const String salesroute = 'lugares';
-  const PlacesScreen({super.key});
+  const PlacesScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,8 @@ class PlacesScreen extends StatelessWidget {
     }
 
     final navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
+    final notificationBloc =
+        BlocProvider.of<NotificationBloc>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -42,10 +46,6 @@ class PlacesScreen extends StatelessWidget {
                   Color.fromRGBO(2, 79, 49, 1),
                 ],
               ),
-              // borderRadius: BorderRadius.only(
-              //   bottomLeft: Radius.circular(30),
-              //   bottomRight: Radius.circular(30),
-              // ),
             ),
             child: AppBar(
               elevation: 0,
@@ -56,6 +56,22 @@ class PlacesScreen extends StatelessWidget {
                 'Mis Direcciones',
                 style: TextStyle(color: Colors.white),
               ),
+              actions: [
+                // Opción "Ver Mapa"
+                TextButton(
+                  onPressed: () {
+                    notificationBloc.loadNotification();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MapScreen()),
+                    );
+                  },
+                  child: const Text(
+                    'Ver Mapa',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(

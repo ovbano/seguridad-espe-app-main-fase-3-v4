@@ -50,6 +50,7 @@ class LoginScreen extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               child: Container(
                 margin: const EdgeInsets.all(30),
+                height: MediaQuery.of(context).size.height * 0.86,
                 child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -60,14 +61,7 @@ class LoginScreen extends StatelessWidget {
                       text: "¿No tienes cuenta?",
                       text2: "Crea una",
                     ),
-                    SizedBox(height: 10),
-                    /*Text(
-                  "Terminos y condiciones de uso",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromRGBO(0, 0, 0, 0.782),
-                  ),
-                ),*/
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
